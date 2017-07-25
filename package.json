@@ -1,0 +1,18 @@
+{
+  "name": "youtube-server",
+  "version": "1.0.0",
+  "description": "A node server, that would serve youtube search results and also stream audio from youtube sources",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Rahul Agarwal",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.15.3",
+    "fluent-ffmpeg": "^2.1.2",
+    "superagent": "^3.5.2",
+    "ytdl-audio": "*",
+    "ytdl-core": "^0.14.4"
+  }
+}
