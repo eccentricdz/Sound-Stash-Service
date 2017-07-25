@@ -32,40 +32,34 @@ app.get('/search/:query', (req, res) => {
 	}
 })
 
-app.get('/download/video/:videoId', (req, res) => {
+app.get('/:action(download|stream)/video/:videoId', (req, res) => {
+
+	const isDownloadRequest = utils.isDownloadRequest(req.params.action)
 
 	const videoId = req.params.videoId
 	let videoReadableStream = utils.getVideoReadableStream(videoId)
-	const videoFile = fs.createWriteStream(videoId+'.mp4')
+	const fileName = videoId+'.mp4' //TODO: update this to include video title
 
-	videoFile.on('finish', () => {
-		res.download(videoId+'.mp4')
-	})
+	if (isDownloadRequest) {
+		res.set('Content-disposition', 'attachment; filename=' + fileName)
+	}
 
-	videoReadableStream.pipe(videoFile)
+	res.set('Content-Type', 'video/mp4')
+	videoReadableStream.pipe(res)
 
 })
 
-app.get('/download/audio/:videoId', (req, res) => {
+app.get('/:action(download|stream)/audio/:videoId', (req, res) => {
+	
+	const isDownloadRequest = utils.isDownloadRequest(req.params.action)
 
 	const videoId = req.params.videoId
 	let videoReadableStream = utils.getVideoReadableStream(videoId)
+	const fileName = videoId+'.mp3' //TODO: update this to include video title
 
-	ffmpeg()
-		.input(videoReadableStream)
-		.output('audio.mp3')
-		.on('end', () => {
-			res.download('audio.mp3')
-		})
-		.on('error', (err) => {
-			console.log('[ffmpeg] error while converting to audio: ', err.code, err.msg)
-			res.status(500).send({ error: '[ffmpeg] error while converting to audio' })
-		}).run()
-})
-
-app.get('/stream/audio/:videoId', (req, res) => {
-	const videoId = req.params.videoId
-	let videoReadableStream = utils.getVideoReadableStream(videoId)
+	if (isDownloadRequest) {
+		res.set('Content-disposition', 'attachment; filename=' + fileName)
+	}
 
 	ffmpeg(videoReadableStream)
 		.format('mp3')

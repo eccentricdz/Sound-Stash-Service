@@ -7,6 +7,9 @@ const youtubeServerUtils = {
 		let videoReadableStream = ytdl(videoUrl)
 
 		return videoReadableStream
+	},
+	isDownloadRequest: function(action) {
+		return action === 'download'
 	}
 }
 
