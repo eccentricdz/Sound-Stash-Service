@@ -26,6 +26,7 @@ app.get('/search/:query', (req, res) => {
 				else {
 					const jsonResponse = JSON.parse(result.text)
 					const items = jsonResponse.items
+					res.set('Access-Control-Allow-Origin', '*')
 					res.status(200).send(items)
 				}
 			})
