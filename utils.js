@@ -10,6 +10,12 @@ const youtubeServerUtils = {
 	},
 	isDownloadRequest: function(action) {
 		return action === 'download'
+	},
+	getVideoMetaData: function(videoId) {
+		const videoUrl = youtubeUrl + videoId
+		let promise = ytdl.getInfo(videoUrl)
+
+		return promise
 	}
 }
 
