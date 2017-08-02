@@ -65,10 +65,6 @@ app.get('/:action(download|stream)/audio/:videoId', (req, res) => {
 
 		const fileName = info.title+'.mp3' //TODO: update this to include video title
 
-		if (isDownloadRequest) {
-			res.set('Content-disposition', 'attachment; filename=' + fileName)
-		}
-
 		let videoReadableStream = ytdl.downloadFromInfo(info)
 		ffmpeg(videoReadableStream)
 			//.input(info.thumbnail_url)
@@ -79,9 +75,12 @@ app.get('/:action(download|stream)/audio/:videoId', (req, res) => {
 			.on('start', (cmdLine) => {
 				console.log('[ffmpeg] Starting audio conversion')
 				res.set('Content-Type', 'audio/mpeg')
+				if (isDownloadRequest) {
+					res.set('Content-disposition', 'attachment; filename="' + fileName+ '"')
+				}
 			})
 			.on('error', (err) => {
-				console.log('[ffmpeg] Error while converting to audio: ', err.toString)
+				console.log('[ffmpeg] Error while converting to audio: ', err.toString())
 			})
 			.on('end', () => {
 				console.log('[ffmpeg] Audio conversion finished')
