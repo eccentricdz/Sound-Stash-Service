@@ -43,7 +43,7 @@ app.get('/:action(download|stream)/video/:videoId', (req, res) => {
 		const fileName = info.title +'.mp4' //TODO: update this to include video title
 
 		if (isDownloadRequest) {
-			res.set('Content-disposition', 'attachment; filename=' + fileName)
+			res.set('Content-disposition', `attachment; filename="${fileName}"`)
 		}
 
 		res.set('Content-Type', 'video/mp4')
@@ -63,7 +63,7 @@ app.get('/:action(download|stream)/audio/:videoId', (req, res) => {
 	//let videoReadableStream = utils.getVideoReadableStream(videoId)
 	utils.getVideoMetaData(videoId).then((info) => {
 
-		const fileName = info.title+'.mp3' //TODO: update this to include video title
+		const fileName = `${info.title}.mp3` //TODO: update this to include video title
 
 		let videoReadableStream = ytdl.downloadFromInfo(info)
 		ffmpeg(videoReadableStream)
@@ -76,7 +76,7 @@ app.get('/:action(download|stream)/audio/:videoId', (req, res) => {
 				console.log('[ffmpeg] Starting audio conversion')
 				res.set('Content-Type', 'audio/mpeg')
 				if (isDownloadRequest) {
-					res.set('Content-disposition', 'attachment; filename="' + fileName+ '"')
+					res.set('Content-disposition', `attachment; filename="${fileName}"`)
 				}
 			})
 			.on('error', (err) => {
