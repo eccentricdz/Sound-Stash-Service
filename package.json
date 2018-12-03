@@ -14,6 +14,6 @@
     "fluent-ffmpeg": "^2.1.2",
     "superagent": "^3.5.2",
     "ytdl-audio": "*",
-    "ytdl-core": "^0.14.4"
+    "ytdl-core": "0.20.2"
   }
 }
